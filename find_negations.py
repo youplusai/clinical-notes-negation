@@ -49,3 +49,14 @@ final_results = get_negation_entities(bc5_model, clinical_note, negation_model)
 
 #Print the list of negative identities
 print(final_results)
+
+#Including additional patterns in the model
+def negation_model_1(nlp_model):
+    nlp = spacy.load(nlp_model)
+    negex = Negex(nlp)
+    #add patterns to match
+    negex.following_patterns += [nlp('absent')]
+    update = [i.text for i in negex.following_patterns]
+    negex = Negex(nlp, following_negations=update)
+    nlp.add_pipe(negex)
+    return nlp
